@@ -45,7 +45,9 @@ for (i in 1:N) {
 # area-specific trends
 	xi[i,1:T] ~ car.normal(adj.tm[],weights.tm[],num.tm[],prec.xi[i])
 # area-specific intercepts 
-	u[i] ~ dnorm(0, prec.eta)
+	# u[i] ~ dnorm(0, prec.eta)
+# area-specific intercepts (no smoothing)
+	u[i] ~ dnorm(0,0.001)
 
 # hierarchical modelling of the local temporal variability
 	prec.xi[i] <- pow(var.xi[i],-1)
@@ -55,8 +57,8 @@ for (i in 1:N) {
 }
 
 # hyper priors
-prec.eta <- pow(sigma.eta, -2)
-sigma.eta ~ dunif(0,10)
+# prec.eta <- pow(sigma.eta, -2)
+# sigma.eta ~ dunif(0,10)
 mean.log.var.xi ~ dnorm(0,0.001)
 prec.log.var.xi <- pow(var.log.var.xi,-1)
 var.log.var.xi <- pow(sd.log.var.xi,2)
@@ -174,12 +176,12 @@ data <- list(y2=y.s, T = T, N = N, offset = offset2, W3 = W1)
 
 # Initial values
 inits <- function (){
-  list (log.var.xi=rnorm(N),sigma.eta=runif(1), u=rnorm(N,-15,1),gamma3=rnorm(N) )
+  list (log.var.xi=rnorm(N), u=rnorm(N,-15,1),gamma3=rnorm(N) )
 }
 
 
 # Parameters monitored
-parameters <- c('u','xi','sigma.eta','gamma3')
+parameters <- c('u','xi','gamma3')
 
 
 # MCMC settings
@@ -224,7 +226,12 @@ max(out$summary[, c("Rhat")])
 
 str(out)
 
+# Save BUGS output
+saveRDS(out, file="country.bugs.rds")
+saveRDS(dat, file="country.dat.rds")
 
+
+# out.country <- readRDS("country.rds")
 
 # write.csv(z.vals,'z_clus_1.csv',row.names=F)
 
