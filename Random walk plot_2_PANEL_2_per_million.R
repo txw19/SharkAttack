@@ -1,4 +1,7 @@
 ###############################################################
+ # Read in BUGS output
+out <- readRDS("country.bugs.rds")
+dat <- readRDS("country.dat.rds")
 
 
 ###########################
