@@ -3,6 +3,12 @@
 out <- readRDS("regions.bugs.rds")
 dat <- readRDS("regions.dat.rds")
 
+# Number of regions
+N <- length(unique(dat$REGION))
+N
+
+T <- length(unique(dat$YEAR))
+T
 
 ###########################
 # SITE-SPECIFIC TRENDS
@@ -61,7 +67,7 @@ dat$ratio2 <- dat$ATTACKS/(dat$POP/1000000)
 # Region names
 
 region_names <- c('Eastern US','Western US','Hawaii',
-                  'Eastern Africa','Sounthwest Africa','Southern Australia','Northern Australia')
+                  'Eastern Africa','Southwest Africa','Southern Australia','Northern Australia')
 
 ########### PLOT
 res <- 6
@@ -82,7 +88,7 @@ plotYear <- min(dat$YEAR):max(dat$YEAR)
 
 nf <- layout(matrix( c(1:(N)),nrow=4,ncol=2,byrow=T),  TRUE) 
 layout.show(nf)
-par(mar=c(0.5,0.5,0.5,0.5),oma=c(3,3,0,1),mai=c(0.1,0.3,0.1,0) )	
+par(mar=c(0.5,0.5,0.5,0.5),oma=c(3,3,0,1),mai=c(0.05,0.3,0.1,0) )	
 
 for(i in 1:7){
 
@@ -105,7 +111,18 @@ points(dat$YEAR[dat$region2==i], dat$ratio2[dat$region2==i], pch=16, cex=0.8)
 
 text(1991,max(SiteTrendUCI[, i])-(max(SiteTrendUCI[, i])/6),region_names[i],cex=1.2)
 
-axis(side=1, cex.axis=1, at=plotYear,  tck=-0.01, mgp=c(0,0.2,0) ) 
+
+if( i <=5){
+  axis(side=1,cex.axis=1 , mgp=c(1,0,0),tck= -0.02, at=seq(1970,2015,by=5),labels=F ) 
+} else {
+  axis(side=1, cex.axis=1, at=seq(1970,2015,by=5), 
+       labels=c('1970', '1975', '1980', '1985', '1990', '1995', '2000', '2005',
+                '2010', '2015'),
+       tck=-0.01, mgp=c(1,0,0) ) 
+}
+
+
+# axis(side=1, cex.axis=1, at=plotYear,  tck=-0.01, mgp=c(0,0.2,0) ) 
 axis(side=2,cex.axis=1,font=1 ,tck=-0.01, mgp=c(0,0.18,0), las=1) 
 mtext(x.label, line = 1, side = 1, cex = size.text, outer=T)
 mtext(y.label, line = 0.3, side = 2, cex = size.text, outer=T)
