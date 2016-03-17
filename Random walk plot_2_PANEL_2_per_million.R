@@ -3,7 +3,11 @@
 out <- readRDS("country.bugs.rds")
 dat <- readRDS("country.dat.rds")
 
+N <- length(unique(dat$COUNTRY))
+N
 
+T <- length(unique(dat$YEAR))
+T
 ###########################
 # SITE-SPECIFIC TRENDS
 ###########################
@@ -81,7 +85,7 @@ plotYear <- min(dat$YEAR):max(dat$YEAR)
 
 nf <- layout(matrix( c(1:(N)),nrow=7,ncol=2,byrow=T),  TRUE) 
 layout.show(nf)
-par(mar=c(0.5,0.5,0.5,0.5),oma=c(3,3,0,1),mai=c(0.1,0.3,0.1,0) )	
+par(mar=c(0.5,0.5,0.5,0.5),oma=c(3,3,0,1),mai=c(0.05,0.3,0.1,0) )	
 
 for(i in 1:N){
 
@@ -96,6 +100,17 @@ y.polygon <- c( SiteTrendLCI[,i][i.for] , SiteTrendUCI[,i][i.back] )
 polygon( x.polygon , y.polygon , col = "gray" , border = NA )
 
 
+if( i <=12){
+  axis(side=1,cex.axis=1 , mgp=c(1,0,0),tck= -0.02, at=seq(1960,2015,by=5),labels=F ) 
+} else {
+  axis(side=1, cex.axis=1, at=seq(1960,2015,by=5), 
+       labels=c('1960','1965', '1970', '1975', '1980', '1985', '1990', '1995', '2000', '2005',
+                '2010', '2015'),
+       tck=-0.01, mgp=c(1,0,0) ) 
+}
+
+
+
 # Add fitted lines
 points(plotYear,SiteTrend2[,i], cex=0.8, pch=16,type='l',lty=1.5)
 
@@ -104,7 +119,7 @@ points(dat$YEAR[dat$country2==i], dat$ratio2[dat$country2==i], pch=16, cex=0.8)
 
 text(1991,max(SiteTrendUCI[,i])-(max(SiteTrendUCI[,i])/6),state_names[i],cex=1.2)
 
-axis(side=1, cex.axis=1, at=plotYear,  tck=-0.01, mgp=c(0,0.2,0) ) 
+#axis(side=1, cex.axis=1, at=plotYear,  tck=-0.01, mgp=c(0,0.2,0) ) 
 axis(side=2,cex.axis=1,font=1 ,tck=-0.01, mgp=c(0,0.18,0), las=1) 
 mtext(x.label, line = 1, side = 1, cex = size.text, outer=T)
 mtext(y.label, line = 0.3, side = 2, cex = size.text, outer=T)
@@ -115,9 +130,4 @@ par(def.par)
 dev.off()
 
 
-#plot(dat$Year[dat$state2==1], dat$ratio[dat$state2==1], pch=16, cex=0.8)
-#plot(dat$Year[dat$state2==9], dat$ratio[dat$state2==9], pch=16, cex=0.8)
 
-# max(SiteTrendUCI[,9])-(max(SiteTrendUCI[,9])/5)
-
-# max(SiteTrendUCI[,9])+1e-06
