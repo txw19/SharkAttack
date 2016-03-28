@@ -20,6 +20,8 @@ dat$ratio <- dat$ATTACKS/dat$POP
 # This should equal dim(dat) above
 length(unique(dat$COUNTRY)) * length(unique(dat$YEAR))
 
+# countries <- unique(dat$COUNTRY)
+# write.csv(countries, 'unique_countries.csv',row.names=F)
 
 #################################################################
 ########## BUGS CODE ############################################
@@ -62,10 +64,10 @@ for (i in 1:N) {
 mean.log.var.xi ~ dnorm(0,0.001)
 prec.log.var.xi <- pow(var.log.var.xi,-1)
 var.log.var.xi <- pow(sd.log.var.xi,2)
-#sd.log.var.xi ~ dunif(0,5)
-sd.log.var.xi ~ dnorm(0,prec.sd.log.var.xi)I(0,)
-sd.sd.log.var.xi <- 2.5
-prec.sd.log.var.xi <- pow(sd.sd.log.var.xi,-2)
+sd.log.var.xi ~ dunif(0,5)
+# sd.log.var.xi ~ dnorm(0,prec.sd.log.var.xi)I(0,)
+# sd.sd.log.var.xi <- 2.5
+# prec.sd.log.var.xi <- pow(sd.sd.log.var.xi,-2)
 
 
 #####################
@@ -176,7 +178,7 @@ data <- list(y2=y.s, T = T, N = N, offset = offset2, W3 = W1)
 
 # Initial values
 inits <- function (){
-  list (log.var.xi=rnorm(N), u=rnorm(N,-15,1),gamma3=rnorm(N) )
+  list (u=rnorm(N,-15,1),gamma3=rnorm(N) )
 }
 
 
